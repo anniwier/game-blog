@@ -1,0 +1,142 @@
+========================================
+  GameBlog 游戏攻略博客 - 功能实现说明
+========================================
+
+一、项目概述
+----------------------------------------
+GameBlog 是一个基于 Spring Boot 3 + Vue 3 的全栈游戏攻略分享平台。
+用户可浏览游戏、查看攻略、发表评论、收藏游戏；管理员可管理文章内容。
+
+技术栈：
+  后端：Java 17 / Spring Boot 3.2.1 / MyBatis-Plus / MySQL 8.0 / Sa-Token
+  前端：Vue 3 / TypeScript / Vite / Pinia / Element Plus / Axios
+
+
+二、页面功能清单
+----------------------------------------
+
+[1] 首页 (/)
+  - 轮播图：随机展示 4 款热门游戏，自动 5 秒切换
+  - 搜索框：按游戏名称/摘要关键词搜索
+  - 分类筛选：按游戏分类（RPG/动作/射击等）过滤
+  - 游戏列表：卡片式展示，含封面、评分、平台、标签
+  - 标签点击：点击标签跳转到对应标签的游戏列表页
+
+[2] 登录 (/login)
+  - 用户名 + 密码登录
+  - Sa-Token 令牌认证
+  - 登录后自动跳回来源页
+
+[3] 注册 (/register)
+  - 用户名 + 密码注册新用户
+
+[4] 游戏详情 (/games/:id)
+  - 游戏信息展示：标题、封面、作者、评分、平台等
+  - 攻略内容：Markdown 渲染显示
+  - 评论系统：查看/发表/删除评论（需登录）
+  - 收藏功能：添加/取消收藏（需登录）
+  - 相关推荐：同分类的其他游戏
+
+[5] 个人中心 (/profile) [需登录]
+  - 查看个人信息
+  - 收藏的游戏列表
+
+[6] 排行榜 (/ranking)
+  - 按浏览量降序排列游戏热度排行
+
+[7] 分类浏览 (/categories)
+  - 按分类分组展示游戏
+  - 可展开/折叠每个分类
+
+[8] 标签筛选 (/tags/:tagId)
+  - 按标签筛选游戏列表
+
+[9] 文章管理 (/admin/articles) [需登录]
+  - 游戏文章列表展示
+  - 新建文章：填写标题/摘要/内容/分类/标签等
+  - 编辑文章：修改已有文章信息
+  - 删除文章：确认后删除
+
+
+三、API 接口清单
+----------------------------------------
+
+认证模块：
+  POST /api/auth/login       登录
+  POST /api/auth/register    注册
+  POST /api/auth/logout      退出
+
+游戏模块：
+  GET  /api/games/list       游戏列表（支持 categoryId/keyword 筛选）
+  GET  /api/games/top        热门排行（浏览量前 6）
+  GET  /api/games/:id        游戏详情
+  GET  /api/games/tags       全部标签
+  GET  /api/games/tag/:id    按标签筛选
+  GET  /api/games/categories 全部分类
+  POST /api/games            新建游戏（需登录）
+  PUT  /api/games/:id        编辑游戏（需登录）
+  DELETE /api/games/:id      删除游戏（需登录）
+
+评论模块：
+  GET  /api/comments/game/:id  获取评论列表
+  POST /api/comments           发表评论（需登录）
+  DELETE /api/comments/:id     删除评论（需登录）
+
+收藏模块：
+  GET  /api/favorites             收藏列表（需登录）
+  POST /api/favorites             添加收藏（需登录）
+  DELETE /api/favorites/:gameId   取消收藏（需登录）
+  GET  /api/favorites/check/:id   检查是否已收藏（需登录）
+
+用户模块：
+  GET  /api/user/info   获取用户信息
+
+
+四、数据库表结构
+----------------------------------------
+
+users          用户表（含用户名、密码、昵称、头像等）
+roles          角色表（USER / ADMIN）
+user_roles     用户角色关联表
+game_categories  游戏分类表
+tags             游戏标签表
+games            游戏攻略表（含标题、内容、评分、平台等）
+game_tags        游戏-标签关联表
+comments         评论表
+favorites        收藏表
+
+
+五、预置数据
+----------------------------------------
+
+测试账号：
+  管理员：admin / admin123
+  普通用户：gamer / gamer123
+
+游戏数据：14 款热门游戏攻略
+  - GTA6 / 艾尔登法环 / 塞尔达：王国之泪 / 黑神话：悟空
+  - 只狼 / 原神 / 博德之门3 / 赛博朋克2077
+  - 星露谷物语 / 最终幻想7重生 / 怪物猎人：荒野
+  - 死亡搁浅2 / 文明7 / 艾尔登法环DLC
+
+评论数据：每款游戏 3 条趣味评论，共 42 条
+分类数据：7 个分类
+标签数据：13 个标签
+
+
+六、启动方式
+----------------------------------------
+
+前置要求：JDK 17+ / Maven 3.6+ / MySQL 8.0+ / Node.js 18+
+
+方式一：一键启动
+  双击 start.bat（自动建库 -> 启动后端 -> 启动前端 -> 打开浏览器）
+
+方式二：手动启动
+  1. 确保 MySQL 已运行，创建数据库 game_blog
+  2. 启动后端：cd game-blog-server && mvn spring-boot:run
+  3. 启动前端：cd game-blog-web && npm install && npm run dev
+  4. 访问 http://localhost:3001
+
+后端端口：8080
+前端端口：3001
