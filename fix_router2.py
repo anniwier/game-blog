@@ -1,0 +1,5 @@
+﻿r = open("game-blog-web/src/router/index.ts", "r", encoding="utf8").read()
+r = r.replace("import TagGamesView", "import RankingView from \x27@/views/RankingView.vue\x27\nimport CategoriesView from \x27@/views/CategoriesView.vue\x27\nimport TagGamesView")
+r = r.replace("meta: { title: \x27标签筛选\x27 }\n    }\n  ]", "meta: { title: \x27标签筛选\x27 }\n    },\n    {\n      path: \x27/ranking\x27,\n      name: \x27ranking\x27,\n      component: RankingView,\n      meta: { title: \x27排行榜\x27 }\n    },\n    {\n      path: \x27/categories\x27,\n      name: \x27categories\x27,\n      component: CategoriesView,\n      meta: { title: \x27分类浏览\x27 }\n    }\n  ]")
+open("game-blog-web/src/router/index.ts", "w", encoding="utf8").write(r)
+print("Router updated")

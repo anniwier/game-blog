@@ -1,0 +1,139 @@
+﻿/* ===== Glass Morphism & Effects ===== */
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --glass-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  --glass-blur: blur(16px);
+  --nav-height: 64px;
+  --card-radius: 16px;
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== Glass Nav Override ===== */
+.el-menu--horizontal {
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+  border-bottom: 1px solid var(--glass-border) !important;
+  height: var(--nav-height) !important;
+}
+
+/* ===== Glass Card Override ===== */
+.el-card {
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: var(--card-radius) !important;
+  box-shadow: var(--glass-shadow) !important;
+  transition: var(--transition-smooth) !important;
+}
+.el-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12) !important;
+}
+
+/* ===== Input Override ===== */
+.el-input__wrapper {
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+}
+.el-input__wrapper.is-focus {
+  border-color: var(--el-menu-active) !important;
+  box-shadow: 0 0 0 3px rgba(64,158,255,0.15) !important;
+}
+
+/* ===== Tag Override ===== */
+.el-tag {
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+}
+
+/* ===== Button Override ===== */
+.el-button--primary {
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+}
+
+/* ===== Avatar Override ===== */
+.el-avatar {
+  border: 2px solid var(--glass-border) !important;
+}
+
+/* ===== Smooth Scrollbar ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 3px; }
+
+/* ===== Animated Gradient Background ===== */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ===== Glass Card ===== */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--card-radius);
+  box-shadow: var(--glass-shadow);
+  transition: var(--transition-smooth);
+}
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+}
+
+/* ===== Theme: CSS Variables ===== */
+:root,
+.theme-light {
+  --bg-primary: #f0f2f5;
+  --bg-gradient: linear-gradient(135deg, #f0f2f5 0%, #e2e8f0 50%, #edf2f7 100%);
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-nav: #ffffff;
+  --text-primary: #1a1a2e;
+  --text-secondary: #555;
+  --text-muted: #999;
+  --border-color: #ebeef5;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --hero-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --card-hover: translateY(-6px);
+  --rating-color: #f59e0b;
+  --tag-bg: #409eff;
+  --input-bg: #fff;
+  --el-menu-bg: #fff;
+  --el-menu-text: #333;
+  --el-menu-active: #409eff;
+}
+
+/* Theme transition */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+body {
+  background: var(--bg-gradient);
+  color: var(--text-primary);
+}
+
+/* Element Plus overrides */
+.el-menu--horizontal .el-menu-item {
+  background: transparent !important;
+  color: var(--el-menu-text) !important;
+}
+.el-menu--horizontal .el-menu-item.is-active {
+  color: var(--el-menu-active) !important;
+  border-bottom-color: var(--el-menu-active) !important;
+}
+.el-empty__description p {
+  color: var(--text-muted) !important;
+}

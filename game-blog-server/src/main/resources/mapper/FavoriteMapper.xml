@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.game.blog.mapper.FavoriteMapper">
+
+    <resultMap id="FavoriteResultMap" type="com.game.blog.domain.entity.Favorite">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="game_id" property="gameId" />
+        <result column="created_at" property="createdAt" />
+    </resultMap>
+
+    <select id="selectUserFavorites" resultMap="FavoriteResultMap">
+        SELECT f.id, f.user_id, f.game_id, f.created_at
+        FROM favorites f
+        WHERE f.user_id = #{userId}
+        ORDER BY f.created_at DESC
+    </select>
+
+    <select id="countUserFavorite" resultType="int">
+        SELECT COUNT(*) FROM favorites
+        WHERE user_id = #{userId} AND game_id = #{gameId}
+    </select>
+</mapper>

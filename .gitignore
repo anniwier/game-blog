@@ -1,0 +1,33 @@
+﻿# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build
+game-blog-server/target/
+game-blog-web/dist/
+*.log
+*.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.local
+*.env
+
+# Misc
+*.swp
+*.swo
+*~
+.agents/

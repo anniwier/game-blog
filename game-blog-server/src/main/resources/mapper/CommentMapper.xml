@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.game.blog.mapper.CommentMapper">
+
+    <select id="selectGameComments" resultType="com.game.blog.domain.vo.CommentVO">
+        SELECT
+            c.id,
+            c.game_id AS gameId,
+            c.user_id AS userId,
+            u.nickname AS username,
+            u.avatar,
+            c.content,
+            c.created_at AS createdAt
+        FROM comments c
+        LEFT JOIN users u ON c.user_id = u.id
+        WHERE c.game_id = #{gameId}
+        ORDER BY c.created_at DESC
+    </select>
+</mapper>

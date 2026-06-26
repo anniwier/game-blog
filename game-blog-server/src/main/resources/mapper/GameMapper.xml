@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.game.blog.mapper.GameMapper">
+    
+    <resultMap id="GameItemResultMap" type="com.game.blog.domain.vo.GameItemVO">
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="slug" property="slug" />
+        <result column="summary" property="summary" />
+        <result column="cover_image" property="coverImage" />
+        <result column="content" property="content" />
+        <result column="category_id" property="categoryId" />
+        <result column="category_name" property="categoryName" />
+        <result column="author_id" property="authorId" />
+        <result column="author_name" property="authorName" />
+        <result column="platform" property="platform" />
+        <result column="rating" property="rating" />
+        <result column="developer" property="developer" />
+        <result column="publisher" property="publisher" />
+        <result column="release_date" property="releaseDate" />
+        <result column="view_count" property="viewCount" />
+        <result column="like_count" property="likeCount" />
+        <result column="favorite_count" property="favoriteCount" />
+        <result column="published_at" property="publishedAt" />
+        <result column="created_at" property="createdAt" />
+        <collection property="tags" ofType="com.game.blog.domain.vo.TagVO" columnPrefix="tag_">
+            <id column="id" property="id" />
+            <result column="name" property="tagName" />
+            <result column="code" property="tagCode" />
+            <result column="color" property="color" />
+        </collection>
+    </resultMap>
+
+    <select id="selectGameItemList" resultMap="GameItemResultMap">
+        SELECT 
+            g.id, g.title, g.slug, g.summary, g.cover_image,
+            g.category_id, gc.category_name,
+            g.author_id, u.nickname AS author_name,
+            g.platform, g.rating, g.developer, g.publisher,
+            g.release_date, g.view_count, g.like_count, g.favorite_count,
+            g.published_at, g.created_at,
+            t.id AS tag_id, t.tag_name AS tag_name, t.tag_code AS tag_code, t.color AS tag_color
+        FROM games g
+        LEFT JOIN game_categories gc ON g.category_id = gc.id
+        LEFT JOIN users u ON g.author_id = u.id
+        LEFT JOIN game_tags gt ON g.id = gt.game_id
+        LEFT JOIN tags t ON gt.tag_id = t.id
+        WHERE g.status = 1 AND g.is_deleted = 0
+        ORDER BY g.published_at DESC
+    </select>
+
+    <select id="selectTopGameItemList" resultMap="GameItemResultMap">
+        SELECT 
+            g.id, g.title, g.slug, g.summary, g.cover_image,
+            g.category_id, gc.category_name,
+            g.author_id, u.nickname AS author_name,
+            g.platform, g.rating, g.developer, g.publisher,
+            g.release_date, g.view_count, g.like_count, g.favorite_count,
+            g.published_at, g.created_at,
+            t.id AS tag_id, t.tag_name AS tag_name, t.tag_code AS tag_code, t.color AS tag_color
+        FROM games g
+        JOIN (
+            SELECT id FROM games WHERE status = 1 AND is_deleted = 0 ORDER BY view_count DESC LIMIT 6
+        ) top ON g.id = top.id
+        LEFT JOIN game_categories gc ON g.category_id = gc.id
+        LEFT JOIN users u ON g.author_id = u.id
+        LEFT JOIN game_tags gt ON g.id = gt.game_id
+        LEFT JOIN tags t ON gt.tag_id = t.id
+        WHERE g.status = 1 AND g.is_deleted = 0
+        ORDER BY g.view_count DESC
+    </select>
+
+    <select id="selectGameItemListByTag" resultMap="GameItemResultMap">
+        SELECT 
+            g.id, g.title, g.slug, g.summary, g.cover_image,
+            g.category_id, gc.category_name,
+            g.author_id, u.nickname AS author_name,
+            g.platform, g.rating, g.developer, g.publisher,
+            g.release_date, g.view_count, g.like_count, g.favorite_count,
+            g.published_at, g.created_at,
+            t.id AS tag_id, t.tag_name AS tag_name, t.tag_code AS tag_code, t.color AS tag_color
+        FROM games g
+        LEFT JOIN game_categories gc ON g.category_id = gc.id
+        LEFT JOIN users u ON g.author_id = u.id
+        LEFT JOIN game_tags gt ON g.id = gt.game_id
+        LEFT JOIN tags t ON gt.tag_id = t.id
+        WHERE g.status = 1 AND g.is_deleted = 0 AND g.id IN (
+            SELECT game_id FROM game_tags WHERE tag_id = #{tagId}
+        )
+        ORDER BY g.published_at DESC
+    </select>
+
+    <select id="selectGameItemById" resultMap="GameItemResultMap">
+        SELECT 
+            g.id, g.title, g.slug, g.summary, g.content, g.cover_image,
+            g.category_id, gc.category_name,
+            g.author_id, u.nickname AS author_name,
+            g.platform, g.rating, g.developer, g.publisher,
+            g.release_date, g.view_count, g.like_count, g.favorite_count,
+            g.published_at, g.created_at,
+            t.id AS tag_id, t.tag_name AS tag_name, t.tag_code AS tag_code, t.color AS tag_color
+        FROM games g
+        LEFT JOIN game_categories gc ON g.category_id = gc.id
+        LEFT JOIN users u ON g.author_id = u.id
+        LEFT JOIN game_tags gt ON g.id = gt.game_id
+        LEFT JOIN tags t ON gt.tag_id = t.id
+        WHERE g.id = #{id} AND g.is_deleted = 0
+    </select>
+
+    <select id="selectGameItemListByCategory" resultMap="GameItemResultMap">
+        SELECT 
+            g.id, g.title, g.slug, g.summary, g.cover_image,
+            g.category_id, gc.category_name,
+            g.author_id, u.nickname AS author_name,
+            g.platform, g.rating, g.developer, g.publisher,
+            g.release_date, g.view_count, g.like_count, g.favorite_count,
+            g.published_at, g.created_at,
+            t.id AS tag_id, t.tag_name AS tag_name, t.tag_code AS tag_code, t.color AS tag_color
+        FROM games g
+        LEFT JOIN game_categories gc ON g.category_id = gc.id
+        LEFT JOIN users u ON g.author_id = u.id
+        LEFT JOIN game_tags gt ON g.id = gt.game_id
+        LEFT JOIN tags t ON gt.tag_id = t.id
+        WHERE g.status = 1 AND g.is_deleted = 0 AND g.category_id = #{categoryId}
+        ORDER BY g.published_at DESC
+    </select>
+
+    <select id="searchGameItemList" resultMap="GameItemResultMap">
+        SELECT 
+            g.id, g.title, g.slug, g.summary, g.cover_image,
+            g.category_id, gc.category_name,
+            g.author_id, u.nickname AS author_name,
+            g.platform, g.rating, g.developer, g.publisher,
+            g.release_date, g.view_count, g.like_count, g.favorite_count,
+            g.published_at, g.created_at,
+            t.id AS tag_id, t.tag_name AS tag_name, t.tag_code AS tag_code, t.color AS tag_color
+        FROM games g
+        LEFT JOIN game_categories gc ON g.category_id = gc.id
+        LEFT JOIN users u ON g.author_id = u.id
+        LEFT JOIN game_tags gt ON g.id = gt.game_id
+        LEFT JOIN tags t ON gt.tag_id = t.id
+        WHERE g.status = 1 AND g.is_deleted = 0 AND (g.title LIKE CONCAT('%', #{keyword}, '%') OR g.summary LIKE CONCAT('%', #{keyword}, '%'))
+        ORDER BY g.published_at DESC
+    </select>
+</mapper>
